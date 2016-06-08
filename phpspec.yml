@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: Require
+        psr4_prefix: Require
+        src_path: app

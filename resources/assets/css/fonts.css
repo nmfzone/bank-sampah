@@ -1,0 +1,32 @@
+@font-face{ 
+  font-family: 'Daydream';
+  src: url('../fonts/daydream.eot');
+  src: url('../fonts/daydream.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/daydream.woff') format('woff'),
+  url('../fonts/daydream.ttf') format('truetype'),
+  url('../fonts/daydream.svg#webfont') format('svg');
+}
+@font-face{ 
+  font-family: 'Helv';
+  src: url('../fonts/helv.eot');
+  src: url('../fonts/helv.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/helv.woff') format('woff'),
+  url('../fonts/helv.ttf') format('truetype'),
+  url('../fonts/helv.svg#webfont') format('svg');
+}
+@font-face{ 
+  font-family: 'Blow Brush';
+  src: url('../fonts/blowbrush.eot');
+  src: url('../fonts/blowbrush.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/blowbrush.woff') format('woff'),
+  url('../fonts/blowbrush.ttf') format('truetype'),
+  url('../fonts/blowbrush.svg#webfont') format('svg');
+}
+@font-face{ 
+  font-family: 'Big John';
+  src: url('../fonts/big_john.eot');
+  src: url('../fonts/big_john.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/big_john.woff') format('woff'),
+  url('../fonts/big_john.ttf') format('truetype'),
+  url('../fonts/big_john.svg#webfont') format('svg');
+}

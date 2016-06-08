@@ -1,0 +1,7 @@
+{
+  "directory": "frontend/vendor",
+  "strict-ssl": false,
+  "ignoredDependencies": [
+    "bootstrap-sass"
+  ]
+}
