@@ -35,10 +35,10 @@ class UserManagementImpl implements UserManagementContract
             ->where('created_at', '>=', $carbon->startOfMonth())
             ->groupBy('user_id')
             ->orderBy('total', 'DESC')
-            ->first();
+            ->first()->user_id;
 
         if (null != $id) {
-            return User::find($id)->get();
+            return User::find($id);
         }
 
         return null;
