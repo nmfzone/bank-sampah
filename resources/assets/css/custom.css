@@ -38,6 +38,12 @@ body.landing {
   margin-top: 45%;
 }
 
+@media only screen and (max-width: 300px) {
+  .landing .clock {
+    font-size: 20px;
+  }
+}
+
 
 /* * * * * * * * * * * * * * */
 /*        Login Page         */
@@ -88,7 +94,7 @@ body.landing {
   border-bottom: 1px solid #e7e7e7;
 }
 
-.userDashboard.dashboard-message .user-name,
+.userDashboard .dashboard-message .user-name,
 .adminDashboard .dashboard-message .user-name {
   font-size: 22px;
 }
@@ -168,83 +174,11 @@ body.landing {
   text-align: center;
 }
 
-.userDashboard .homepage .user-comp-detail {
-  margin-top: 50px;
-  text-align: left;
-}
-
-.userDashboard .register-competition {
-
-}
-
-.userDashboard .pem_area .col-sm-9,
-.userDashboard .pem_area .col-md-9,
-.userDashboard .pem_area .col-xs-9,
-.userDashboard .pem_area .col-sm-3,
-.userDashboard .pem_area .col-md-3,
-.userDashboard .pem_area .col-xs-3 {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.userDashboard .pem_area .col-md-9 {
-  padding-right: 10px;
-}
-
-.userDashboard .surper_area .col-sm-9,
-.userDashboard .surper_area .col-md-9,
-.userDashboard .surper_area .col-xs-9,
-.userDashboard .surper_area .col-sm-3,
-.userDashboard .surper_area .col-md-3,
-.userDashboard .surper_area .col-xs-3 {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.userDashboard .surper_area .col-md-9 {
-  padding-right: 10px;
-}
-
-.userDashboard .karya_area .col-sm-9,
-.userDashboard .karya_area .col-md-9,
-.userDashboard .karya_area .col-xs-9,
-.userDashboard .karya_area .col-sm-3,
-.userDashboard .karya_area .col-md-3,
-.userDashboard .karya_area .col-xs-3 {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.userDashboard .karya_area .col-md-9 {
-  padding-right: 10px;
-}
-
 .userDashboard .surper_area img.surper_file_prev,
 .userDashboard .pem_area img.pem_file_prev {
   display: none;
   width: 100%;
   margin-bottom: 40px;
-}
-
-.userDashboard .register-competition .form-group {
-  margin-top: 50px;
-}
-
-.userDashboard .register-competition .form-group .submit-now {
-  text-align: center;
-}
-
-.userDashboard .register-competition .form-group .checkbox label {
-  font-size: 15px;
-  margin-top: 7px;
-}
-
-.userDashboard .detail-team {
-  padding-bottom: 100px;
-}
-
-.userDashboard .detail-team h3 {
-  margin-top: 50px;
 }
 
 .userDashboard .list-images .col-md-12:nth-child(1) {
