@@ -71,9 +71,9 @@
                 </tr>
                 @foreach($savings as $saving)
                 <tr>
-                    <td>{{ $saving->category->name }}</td>
-                    <td>{{ $saving->type->name }}</td>
-                    <td>{{ $saving->items_amount }}</td>
+                    <td>{{ $saving->category()->first() != null ? $saving->category()->first()->name : '-' }}</td>
+                    <td>{{ $saving->type()->first() != null ? $saving->type()->first()->name : '-' }}</td>
+                    <td>{{ $saving->items_amount != null ? $saving->items_amount : '-' }}</td>
                     <td>Rp {{ $saving->debit }},00</td>
                     <td>Rp {{ $saving->credit }},00</td>
                     <td>Rp {{ $saving->balance }},00</td>
