@@ -78,7 +78,7 @@ $(function() {
     var param = $.urlParam('name');
     param = (param === null) ? '' : '?name=' + param;
 
-    if (param !== null) {
+    if (param !== '') {
         $('.sync-navigation').remove();
     }
 
