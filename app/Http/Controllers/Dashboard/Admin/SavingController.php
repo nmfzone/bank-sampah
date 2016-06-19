@@ -2,35 +2,67 @@
 
 namespace App\Http\Controllers\Dashboard\Admin;
 
+use DB;
 use Datatables;
+use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Awesome\Contracts\Controllers\Admin\SavingContract;
 
 use App\Saving;
+use App\SavingTemp;
 use App\Category;
 use App\Type;
 use App\User;
 
-use App\Http\Requests\Savings\CreateSavingRequest;
-use App\Http\Requests\Savings\UpdateSavingRequest;
+use App\Http\Requests\Savings\CreateSavingTempRequest;
+use App\Http\Requests\Savings\UpdateSavingTempRequest;
 use App\Http\Requests\Savings\CreateCreditRequest;
+use App\Http\Requests\Savings\SynchronizeSpecificUserRequest;
+use App\Http\Requests\Savings\SynchronizeAllUserRequest;
+use App\Http\Requests\Savings\UnsynchronizeSpecificUserRequest;
+use App\Http\Requests\Savings\UnsynchronizeAllUserRequest;
 
-class SavingController extends Controller implements SavingContract
+// class SavingController extends Controller implements SavingContract
+class SavingController extends Controller
 {
     /**
-     * Display a listing of the saving.
+     * Display a listing of the saving_temp.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $pageTitle = "Daftar Seluruh Transaksi";
+        $pageTitle = "Daftar Seluruh Transaksi Sementara";
 
         return view('dashboard.admin.savings.index', compact('pageTitle'));
     }
 
     /**
-     * Show the form for creating a new saving.
+     * Display a listing of the savings.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexSavings(Request $request, User $user)
+    {
+        $usr = null;
+        if ($request->name != null) {
+            $usr = $user->where('username', $request->name)->first();
+            if ($usr == null) {
+                return abort(404);
+            }
+        }
+
+        $pageTitle = "Daftar Seluruh Transaksi";
+        if ($usr != null) {
+            $pageTitle = "Daftar Transaksi oleh '{$usr->username}'";
+        }
+
+        return view('dashboard.admin.savings.indexSaving', compact('pageTitle'));
+    }
+
+    /**
+     * Show the form for creating a new saving_temp.
      *
      * @param  App\Category  $category
      * @param  App\Type  $type
@@ -46,70 +78,87 @@ class SavingController extends Controller implements SavingContract
     }
 
     /**
-     * Store a newly created saving in storage.
+     * Store a newly created saving_temp in storage.
      *
-     * @param  App\Http\Requests\Savings\CreateSavingRequest  $request
-     * @param  App\Saving  $saving
+     * @param  App\Http\Requests\Savings\CreateSavingTempRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateSavingRequest $request, Saving $saving)
+    public function store(CreateSavingTempRequest $request)
     {
         $this->processingSavingLifeCycle($request, 'create');
         alert()->success('Transaksi baru berhasil ditambahkan.')->persistent("Close");
 
-        return redirect('/dashboard/protected/transactions');
+        return redirect('/dashboard/protected/transactions/temporaries');
     }
 
     /**
-     * Display the specified saving.
+     * Display the specified saving_temp.
      *
      * @param  int  $id
-     * @param  App\Saving  $saving
+     * @param  App\SavingTemp  $savingTemp
      * @return \Illuminate\Http\Response
      */
-    public function show($id, Saving $saving)
+    public function show($id, SavingTemp $savingTemp)
     {
         return abort(404);
     }
 
     /**
-     * Show the form for editing the specified saving.
+     * Show the form for editing the specified saving_temp.
      *
      * @param  int  $id
-     * @param  App\Saving  $saving
+     * @param  App\SavingTemp  $savingTemp
      * @param  App\Category  $category
      * @param  App\Type  $type
      * @return \Illuminate\Http\Response
      */
-    public function edit($id, Saving $saving, Category $category, Type $type)
+    public function edit($id, SavingTemp $savingTemp, Category $category, Type $type)
     {
         $pageTitle = "Edit Transaksi";
-        $saving = $saving->findOrFail($id);
+        $savingTemp = $savingTemp->findOrFail($id);
         $categories = $category->all();
         $types = $type->all();
 
-        if ('out' == $saving->type) {
-            return view('dashboard.admin.savings.credits.edit', compact('pageTitle', 'saving'));
+        if ('out' == $savingTemp->type) {
+            return view('dashboard.admin.savings.credits.edit', compact('pageTitle', 'savingTemp'));
         }
 
-        return view('dashboard.admin.savings.edit', compact('pageTitle', 'saving', 'categories', 'types'));
+        return view('dashboard.admin.savings.edit', compact('pageTitle', 'savingTemp', 'categories', 'types'));
     }
 
     /**
-     * Update the specified saving in storage.
+     * Update the specified saving_temp in storage.
      *
-     * @param  App\Http\Requests\Savings\UpdateSavingRequest $request
+     * @param  App\Http\Requests\Savings\UpdateSavingTempRequest $request
      * @param  int  $id
-     * @param  App\Saving  $saving
+     * @param  App\SavingTemp  $savingTemp
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSavingRequest $request, $id, Saving $saving)
+    public function update(UpdateSavingTempRequest $request, $id, SavingTemp $savingTemp)
     {
-        $saving = $saving->findOrFail($id);
-        $saving->update($request->all());
+        $savingTemp = $savingTemp->findOrFail($id);
+
+        $this->processingSavingLifeCycle($request, "update", $savingTemp);
+
         alert()->success('Detail transaksi berhasil diperbaharui.')->persistent("Close");
 
-        return redirect('/dashboard/protected/transactions');
+        return redirect('/dashboard/protected/transactions/temporaries');
+    }
+
+    /**
+     * Remove the specified saving from storage.
+     *
+     * @param  int  $id
+     * @param  App\SavingTemp  $savingTemp
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id, SavingTemp $savingTemp)
+    {
+        $savingTemp = $savingTemp->findOrFail($id);
+        $savingTemp->delete();
+        alert()->success('Transaksi berhasil di hapus.')->persistent("Close");
+
+        return redirect('/dashboard/protected/transactions/temporaries');
     }
 
     /**
@@ -119,7 +168,7 @@ class SavingController extends Controller implements SavingContract
      * @param  App\Saving  $saving
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id, Saving $saving)
+    public function destroySavings($id, Saving $saving)
     {
         $saving = $saving->findOrFail($id);
         $saving->delete();
@@ -146,51 +195,230 @@ class SavingController extends Controller implements SavingContract
      * @param  App\Http\Requests\Savings\CreateCreditRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function createCredit(CreateCreditRequest $request)
+    public function createCredit(CreateCreditRequest $request, SavingTemp $savingTemp,
+        Saving $saving, User $user)
     {
+        $savingTemp = $savingTemp->where('user_id', $request->user_id)
+            ->first();
+        $saving = $saving->where('user_id', $request->user_id)->where('type', 'in')
+            ->first();
+        $balance = $user->find($request->user_id)->balance($request->created_at);
+        $date = (new Carbon($request->created_at))->format("d F Y H:i:s");
+
+        if ($savingTemp !== null) {
+            alert()->error('Transaksi kredit tidak dapat dilakukan sebelum keseluruhan ' .
+                'transaksi nasabah ini tersinkronisasi.')
+                ->persistent("Close");
+
+            return redirect()->back();
+        }
+
+        if ($saving === null) {
+            alert()->error('Transaksi kredit tidak dapat dilakukan, nasabah belum mempunyai riwayat tabungan')
+                ->persistent("Close");
+
+            return redirect()->back();
+        }
+
+        if ($balance === null) {
+            alert()->error('Transaksi kredit tidak dapat dilakukan, nasabah tidak mempunyai riwayat tabungan ' .
+                'sebelum tanggal ' . $date)
+                ->persistent("Close");
+
+            return redirect()->back();
+        }
+
         $process = $this->processingSavingLifeCycle($request, 'createCredit');
 
-        if (false == $process) {
-            alert()->error('Transaksi kredit tidak dapat dilakukan, saldo akan negatif.')->persistent("Close");
+        if (!$process) {
+            alert()->error('Kredit yang dimasukkan terlalu besar, saldo akan negatif.')->persistent("Close");
 
             return redirect()->back();
         }
 
         alert()->success('Transaksi kredit baru berhasil ditambahkan.')->persistent("Close");
 
-        return redirect('/dashboard/protected/transactions');
+        return redirect('/dashboard/protected/transactions/temporaries');
+    }
+
+    public function synchronizeSpecificUser(SynchronizeSpecificUserRequest $request,
+        SavingTemp $savingTemp)
+    {
+        $savingsTemp = $savingTemp->where('user_id', $request->user_id)->orderBy('created_at')->get();
+
+        foreach ($savingsTemp as $trans) {
+            $id = $trans->id;
+            unset($trans['id']);
+            if ($this->processingSavingLifeCycle($trans, 'sync')) {
+                $savingTemp->find($id)->delete();
+            } else {
+                alert()->error('Sinkronisasi gagal, transaksi dengan id=' . $id .  ' akan menyebabkan saldo negatif.')->persistent("Close");
+                return redirect()->back();
+            }
+        }
+
+        if ($savingTemp->first() === null) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            DB::table('savings_temp')->truncate();
+        }
+
+        alert()->success('Transaksi nasabah berhasil di sinkronisasi.')->persistent("Close");
+
+        return redirect()->back();
+    }
+
+    public function synchronizeAllUser(SynchronizeAllUserRequest $request, User $user, SavingTemp $savingTemp)
+    {
+        $savingsTemp = $savingTemp->all()->sortBy('created_at');
+
+        if ($savingsTemp->isEmpty()) {
+            alert()->error('Tidak ada transaksi yang belum disinkronisasi.')->persistent("Close");
+
+            return redirect()->back();
+        }
+
+        foreach ($savingsTemp as $trans) {
+            $id = $trans->id;
+            unset($trans['id']);
+            if ($this->processingSavingLifeCycle($trans, 'sync')) {
+                $savingTemp->find($id)->delete();
+            } else {
+                alert()->error('Sinkronisasi gagal, transaksi dengan id=' . $id .  ' akan menyebabkan saldo negatif.')->persistent("Close");
+                return redirect()->back();
+            }
+        }
+
+        if ($savingTemp->first() === null) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            DB::table('savings_temp')->truncate();
+        }
+
+        alert()->success('Transaksi seluruh nasabah berhasil di sinkronisasi.')->persistent("Close");
+
+        return redirect()->back();
+    }
+
+    public function unsynchronizeSpecificUser(UnsynchronizeSpecificUserRequest $request,
+        Saving $saving)
+    {
+        $savings = $saving->where('user_id', $request->user_id)->get();
+
+        foreach ($savings as $trans) {
+            $id = $trans->id;
+            unset($trans['id'], $trans['balance']);
+            if ($this->processingSavingLifeCycle($trans, 'unsync')) {
+                $saving->find($id)->delete();
+            }
+        }
+
+        if ($saving->first() === null) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            DB::table('savings')->truncate();
+        }
+
+        alert()->success('Transaksi nasabah berhasil di unsinkronisasi.')->persistent("Close");
+
+        return redirect()->back();
+    }
+
+    public function unsynchronizeAllUser(UnsynchronizeAllUserRequest $request, User $user, Saving $saving)
+    {
+        $savings = $saving->all();
+
+        if ($savings->isEmpty()) {
+            alert()->error('Tidak ada transaksi yang belum di unsinkronisasi.')->persistent("Close");
+
+            return redirect()->back();
+        }
+
+        foreach ($savings as $trans) {
+            $id = $trans->id;
+            unset($trans['id'], $trans['balance']);
+            if ($this->processingSavingLifeCycle($trans, 'unsync')) {
+                $saving->find($id)->delete();
+            }
+        }
+
+        if ($saving->first() === null) {
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            DB::table('savings')->truncate();
+        }
+
+        alert()->success('Transaksi seluruh nasabah berhasil di unsinkronisasi.')->persistent("Close");
+
+        return redirect()->back();
     }
 
     /**
      * Handle the transaction life cycle process.
      *
-     * @param  string  $request
+     * @param  mixed  $data
      * @param  string  $action
+     * @param  mixed  $model
      * @return \Illuminate\Http\Response
      */
-    public function processingSavingLifeCycle($request, $action)
+    public function processingSavingLifeCycle($data, $action, $model = null)
     {
-        $balance = User::find($request->user_id)->balance();
-
-        $otherData = [];
-        if ('in' == $request->type) {
-            $price = Category::find($request->type_id)->first()->price;
-            $otherData['debit'] = $price * $request->items_amount;
-            $otherData['balance'] = $balance + $otherData['debit'];
-        } else if ('out' == $request->type) {
-            $otherData['balance'] = $balance - $request->credit;
-            if ($otherData['balance'] < 0) {
-                return false;
+        if ("unsync" !== $action) {
+            $dataDpl = $data;
+            $balance = 0;
+            if ('sync' === $action) {
+                $dataDpl = $this->toObject($data->toArray());
             }
-        }
-        $data = array_merge($request->all(), $otherData);
 
-        if ('create' == $action || 'createCredit' == $action) {
-            Saving::create($data);
-            return true;
-        }
+            $balance = User::find($dataDpl->user_id)->balance($data['created_at']);
 
-        Saving::update($data);
+            $otherData = [];
+            if ('in' === $dataDpl->type) {
+                $price = Category::find($dataDpl->category_id)->price;
+
+                $otherData['debit'] = $price * $dataDpl->items_amount;
+                if ('sync' === $action) {
+                    $otherData['balance'] = $balance + $otherData['debit'];
+                }
+            } else if ('out' === $dataDpl->type && "update" != $action) {
+                $otherData['balance'] = $balance - $dataDpl->credit;
+                if ($otherData['balance'] < 0) {
+                    return false;
+                }
+            }
+
+            if ('sync' !== $action) {
+                $data = array_merge($data->all(), $otherData);
+
+                if ("update" === $action) {
+                    if ($data['created_at'] != $model->created_at) {
+                        $data['created_at'] = Carbon::createFromFormat('d-m-Y', $data['created_at'])->toDateTimeString();
+                    } else {
+                        $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+                    }
+
+                    $model->update($data);
+                } else {
+                    if ("" === $data['created_at']) {
+                        unset($data['created_at']);
+                    } else {
+                        $data['created_at'] = Carbon::createFromFormat('d-m-Y', $data['created_at'])->toDateTimeString();
+                    }
+
+                    SavingTemp::create($data);
+                }
+
+                return true;
+            }
+
+            $data = array_merge($data->toArray(), $otherData);
+            $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+            $data['updated_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['updated_at'])->toDateTimeString();
+
+            Saving::insert($data);
+        } else if ("unsync" === $action) {
+            $data = $data->toArray();
+            $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+            $data['updated_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['updated_at'])->toDateTimeString();
+
+            SavingTemp::insert($data);
+        }
 
         return true;
     }
@@ -200,12 +428,33 @@ class SavingController extends Controller implements SavingContract
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getSavings()
+    public function getSavings(Request $request, User $user)
     {
-        return Datatables::of(Saving::where('status', 0)->orderBy('created_at', 'DESC')->with('user')->with('category')->with('type'))
-            ->addColumn('action', function ($saving) {
-                $action = '<a href="'. url("dashboard/protected/transactions/" . $saving->id . "/edit") .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
-                $action .= '<a href="'. url("dashboard/protected/transactions/" . $saving->id) .'" class="btn btn-xs btn-primary delete-this"><i class="glyphicon glyphicon-remove"></i> Hapus</a>';
+        if ($request->name != null) {
+            $user = $user->where('username', $request->name)->first();
+            $id = ($user === null) ? -1 : $user->id;
+            return Datatables::of(Saving::where('user_id', $id)->orderBy('created_at', 'DESC')
+                                ->with('user')
+                                ->with('category')
+                                ->with('type'))
+                    ->make(true);
+        }
+
+        return Datatables::of(Saving::orderBy('created_at', 'DESC')->with('user')->with('category')->with('type'))
+            ->make(true);
+    }
+
+    /**
+     * Get all savings_temp by ajax request.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getSavingsTemp()
+    {
+        return Datatables::of(SavingTemp::orderBy('created_at', 'DESC')->with('user')->with('category')->with('type'))
+            ->addColumn('action', function ($savingTemp) {
+                $action = '<a href="'. url("dashboard/protected/transactions/temporaries/" . $savingTemp->id . "/edit") .'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                $action .= '<a href="'. url("dashboard/protected/transactions/temporaries/" . $savingTemp->id) .'" class="btn btn-xs btn-primary delete-this"><i class="glyphicon glyphicon-remove"></i> Hapus</a>';
                 return $action;
             })
             ->make(true);

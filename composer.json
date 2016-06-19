@@ -13,7 +13,8 @@
         "anhskohbo/no-captcha": "2.*",
         "yajra/laravel-datatables-oracle": "~6.0",
         "predis/predis": "~1.0",
-        "sukohi/surpass": "2.*"
+        "sukohi/surpass": "2.*",
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

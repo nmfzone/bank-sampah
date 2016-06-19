@@ -28,8 +28,7 @@ class CreateCreditRequest extends Request
     {
         return [
             'user_id'       => 'required|exists:users,id',
-            'credit'        => 'required|digits_between:1,20',
-            'status'        => 'numeric|digits:1'
+            'credit'        => 'required|digits_between:1,20|positive',
         ];
     }
 

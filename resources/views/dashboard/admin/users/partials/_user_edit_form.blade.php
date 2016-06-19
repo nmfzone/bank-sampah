@@ -20,8 +20,18 @@
     <textarea class="form-control" name="address">{{ $user->address }}</textarea>
 @endsection
 
+@section('input_phone')
+    <input type="text" class="form-control" name="phone" value="{{ $user->phone }}">
+@endsection
+
 @section('input_status')
-    <input type="text" class="form-control" name="status" value="{{ $user->status }}">
+    @foreach($statuses as $k => $status)
+        <option value="{{ $k }}" {{ $k==$user->status ? 'selected':'' }}>{{ $status }}</option>
+    @endforeach
+@endsection
+
+@section('input_date')
+    <input class="form-control input-date" name="created_at" value="{{ $user->created_at }}" readonly>
 @endsection
 
 @section('optional')
@@ -29,5 +39,5 @@
 @endsection
 
 @section('submit_message')
-    Edit User
+    Simpan Perubahan
 @endsection

@@ -63,13 +63,13 @@
                                 </div>
                             </li>
                             <li>
-                                <a href="#"><i class="fa fa-users fa-fw"></i> User<span class="fa arrow"></span></a>
+                                <a href="#"><i class="fa fa-users fa-fw"></i> Nasabah<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="{{ url('dashboard/protected/users/create') }}">Tambah User</a>
+                                        <a href="{{ url('dashboard/protected/users/create') }}">Tambah Nasabah</a>
                                     </li>
                                     <li>
-                                        <a href="{{ url('dashboard/protected/users') }}">Daftar User</a>
+                                        <a href="{{ url('dashboard/protected/users') }}">Daftar Nasabah</a>
                                     </li>
                                 </ul>
                             </li>
@@ -99,7 +99,7 @@
                                 <a href="#"><i class="fa fa-users fa-fw"></i> Transaksi<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
-                                        <a href="{{ url('dashboard/protected/transactions/create') }}">Tambah Transaksi Masuk</a>
+                                        <a href="{{ url('dashboard/protected/transactions/temporaries/create') }}">Tambah Transaksi Masuk</a>
                                     </li>
                                     <li>
                                         <a href="{{ url('dashboard/protected/transactions/credit') }}">Tambah Transaksi Keluar</a>
@@ -107,7 +107,13 @@
                                     <li>
                                         <a href="{{ url('dashboard/protected/transactions') }}">Daftar Transaksi</a>
                                     </li>
+                                    <li>
+                                        <a href="{{ url('dashboard/protected/transactions/temporaries') }}">Daftar Transaksi Sementara</a>
+                                    </li>
                                 </ul>
+                            </li>
+                            <li>
+                                <a href="{{ url('dashboard/protected/recapitulations') }}"><i class="fa fa-users fa-fw"></i> Generate Rekapitulasi</a>
                             </li>
                         </ul>
                     </div>

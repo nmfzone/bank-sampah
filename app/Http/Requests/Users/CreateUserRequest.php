@@ -33,6 +33,7 @@ class CreateUserRequest extends Request
             'email'                 => 'email|max:255|unique:users',
             'password'              => 'required|confirmed|min:6',
             'address'               => 'required',
+            'phone'                 => 'required',
         ];
     }
 

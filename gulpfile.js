@@ -23,6 +23,7 @@ var gulp         = require('gulp'),
     // Configuration for process all assets in each Vendor folder
     // into Laravel resources folder
     inputVendorCss = [
+      'resources/assets/css/vendor/bootstrap.css',
       'resources/assets/css/vendor/*.css'
     ],
     inputVendorJs = [
@@ -31,6 +32,7 @@ var gulp         = require('gulp'),
       'resources/assets/js/vendor/bootstrap.min.js',
       'resources/assets/js/vendor/metisMenu.min.js',
       'resources/assets/js/vendor/sweetalert.min.js',
+      'resources/assets/js/vendor/bootstrap-datepicker.js',
       'resources/assets/js/vendor/*.js'
     ],
     outputVendor = {

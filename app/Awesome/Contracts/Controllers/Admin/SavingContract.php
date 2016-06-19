@@ -33,10 +33,9 @@ interface SavingContract
      * Store a newly created saving in storage.
      *
      * @param  App\Http\Requests\Savings\CreateSavingRequest  $request
-     * @param  App\Saving  $saving
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateSavingRequest $request, Saving $saving);
+    public function store(CreateSavingRequest $request);
 
     /**
      * Display the specified saving.

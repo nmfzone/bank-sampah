@@ -23,6 +23,7 @@
                 <th>No Identitas</th>
                 <th>Nama</th>
                 <th>Email</th>
+                <th>Alamat</th>
                 <th>Tanggal Bergabung</th>
                 <th>Action</th>
             </tr>
@@ -40,13 +41,14 @@
                 serverSide: true,
                 ajax: '{!! route('dashboard.protected.users.getUsers') !!}',
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'id', name: 'id', visible: false },
                     { data: 'username', name: 'username' },
                     { data: 'id_card_number', name: 'id_card_number' },
                     { data: 'name', name: 'name' },
                     { data: 'email', name: 'email' },
+                    { data: 'address', name: 'address', visible: false },
                     { data: 'created_at', name: 'created_at' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false, width: '300px' }
+                    { data: 'action', name: 'action', orderable: false, searchable: false, width: '200px' }
                 ]
             });
         });

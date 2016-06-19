@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class User extends Model implements AuthenticatableContract,
     AuthorizableContract,
@@ -29,7 +30,8 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['username', 'name', 'email', 'password', 'profil_img', 'address', 'id_card_number', 'status'];
+    protected $fillable = ['username', 'name', 'email', 'password', 'profil_img',
+        'address', 'phone', 'id_card_number', 'status', 'created_at'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -37,6 +39,13 @@ class User extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['password', 'remember_token', 'activation_key', 'role_id'];
+
+    /**
+     * List value of user statuses.
+     *
+     * @var array
+     */
+    protected $statuses = ['Aktif', 'Non Aktif', 'Banned'];
 
     /**
      * Always set and make name attribute as Camel Case if not empty.
@@ -65,6 +74,30 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * Always get created_at attribute with the following format.
+     *
+     * @return string
+     */
+    public function getCreatedAtAttribute()
+    {
+        $date = Carbon::parse($this->attributes['created_at']);
+
+        return $date->format('d F Y H:i:s');
+    }
+
+    /**
+     * Always get updated_at attribute with the following format.
+     *
+     * @return string
+     */
+    public function getUpdatedAtAttribute()
+    {
+        $date = Carbon::parse($this->attributes['updated_at']);
+
+        return $date->format('d F Y H:i:s');
+    }
+
+    /**
      * Get the roles record associated with the user.
      *
      * @return App\Role
@@ -72,26 +105,6 @@ class User extends Model implements AuthenticatableContract,
     public function role()
     {
         return $this->belongsTo('App\Role');
-    }
-
-    /**
-     * Get the categories that belong to the user.
-     *
-     * @return App\Category
-     */
-    public function categories()
-    {
-        return $this->belongsToMany('App\Category', 'savings');
-    }
-
-    /**
-     * Get the types that belong to the user.
-     *
-     * @return App\Type
-     */
-    public function types()
-    {
-        return $this->belongsToMany('App\Type', 'savings');
     }
 
     /**
@@ -138,17 +151,43 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Get user balance based on last balance in savings.
      *
+     * @param  string  $created_at
      * @return int
      */
-    public function balance()
+    public function balance($created_at = null)
     {
-        $lastSaving = $this->savings()->orderBy('balance', 'DESC')->first();
-
-        if (null == $lastSaving) {
-            return 0;
+        if (null !== $created_at) {
+            if ("" != $created_at) {
+                $created_at = (new Carbon($created_at))->toDateTimeString();
+            } else {
+                $created_at = Carbon::now()->toDateTimeString();
+            }
+            $lastSaving = $this->savings()->where('created_at', '<=', $created_at)->orderBy('created_at', 'DESC')->first();
+        } else {
+            $lastSaving = $this->savings()->orderBy('created_at', 'DESC')->first();
         }
 
-        return $lastSaving->balance;
+        return (null === $lastSaving) ? null : $lastSaving->balance;
+    }
+
+    /**
+     * Get user items_amount total in savings.
+     *
+     * @return int
+     */
+    public function itemsAmountTotal()
+    {
+        return $this->savings()->sum('items_amount');
+    }
+
+    /**
+     * Get list value of statuses.
+     *
+     * @return array
+     */
+    public function getStatuses()
+    {
+        return $this->statuses;
     }
 
     /**

@@ -9,5 +9,5 @@
 @endsection
 
 @section('submit_message')
-    Edit kategori
+    Simpan Perubahan
 @endsection

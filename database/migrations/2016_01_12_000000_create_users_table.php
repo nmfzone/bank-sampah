@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('password', 60);
             $table->text('address');
+            $table->string('phone');
             $table->string('id_card_number');
             $table->text('profil_img')->nullable();
             $table->text('activation_key')->nullable();

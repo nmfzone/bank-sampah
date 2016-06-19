@@ -20,6 +20,14 @@
     <textarea class="form-control" name="address">{{ old('address') }}</textarea>
 @endsection
 
+@section('input_phone')
+    <input type="text" class="form-control" name="phone" value="{{ old('phone') }}">
+@endsection
+
+@section('input_date')
+    <input class="form-control input-date" name="created_at" value="{{ old('created_at') }}" readonly>
+@endsection
+
 @section('submit_message')
     Tambah User
 @endsection

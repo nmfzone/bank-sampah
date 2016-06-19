@@ -5,31 +5,39 @@ return [
     'ctrl' => [
         'userMan' => [
             'index' => [
-                'title' => 'Daftar User'
+                'title' => 'Daftar Nasabah'
             ],
             'create' => [
-                'title' => 'Tambah User',
+                'title' => 'Tambah Nasabah',
             ],
             'store' => [
-                'success' => 'User baru berhasil ditambahkan.',
+                'success' => 'Nasabah baru berhasil ditambahkan.',
             ],
             'update' => [
                 'success' => [
                     'a' => 'Detail account berhasil diperbaharui.',
-                    'b' => 'Data user berhasil diperbaharui.',
+                    'b' => 'Data nasabah berhasil diperbaharui.',
                 ],
             ],
             'destroy' => [
-                'success' => 'User berhasil di hapus.'
+                'success' => 'Nasabah berhasil di hapus.'
             ],
         ],
         'user' => [
             'index' => [
-                'title' => 'Detail User',
+                'title' => 'Detail Nasabah',
             ],
             'update' => [
-                'success' => 'Data user berhasil diperbaharui.',
+                'success' => 'Data nasabah berhasil diperbaharui.',
             ],
+        ],
+        'transaction' => [
+
+        ],
+        'recapitulation' => [
+            'index' => [
+                'title' => 'Generate Rekapitulasi'
+            ]
         ],
         'auth' => [
             'registration' => [

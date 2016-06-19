@@ -26,7 +26,6 @@ class CreateSavingsTable extends Migration
             $table->bigInteger('balance')->default(0);
             $table->longText('note')->nullable();
             $table->string('type')->default('in');
-            $table->boolean('status')->default(0);
             $table->timestamps();
         });
     }

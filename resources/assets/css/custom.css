@@ -99,14 +99,34 @@ body.landing {
   font-size: 22px;
 }
 
+.userDashboard .input-date, .adminDashboard .input-date {
+  cursor: pointer;
+}
+
 /* Admin Dashboard */
 .adminDashboard {
 
 }
 
-.adminDashboard #users-table a.show-this,
-.adminDashboard #users-table a.delete-this,
-.adminDashboard #users-table a.verified-this {
+.adminDashboard .sync-navigation {
+  padding-bottom: 20px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #35b6f2;
+}
+
+.adminDashboard .text-right .huge a:link,
+.adminDashboard .text-right .huge a:visited {
+  color: #FFF;
+}
+
+.adminDashboard .text-right .huge a:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+.adminDashboard a.show-this,
+.adminDashboard a.delete-this,
+.adminDashboard a.verified-this {
   margin-left: 7px;
 }
 

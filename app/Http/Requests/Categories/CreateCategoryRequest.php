@@ -28,7 +28,7 @@ class CreateCategoryRequest extends Request
     {
         return [
             'name'  => 'required|max:255|unique:categories',
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|positive',
         ];
     }
 

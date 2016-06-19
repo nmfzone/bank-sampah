@@ -57,25 +57,25 @@ class RolePolicy
 
 
     /**
-     * Determine if user can make create saving request.
+     * Determine if user can make create saving_temp request.
      *
      * @param  App\User  $user
      * @param  App\Role  $role
      * @return bool
      */
-    public function createSaving(User $user, Role $role)
+    public function createSavingTemp(User $user, Role $role)
     {
         return $role->name == "Admin";
     }
 
     /**
-     * Determine if user can make update saving request.
+     * Determine if user can make update saving_temp request.
      *
      * @param  App\User  $user
      * @param  App\Role  $role
      * @return bool
      */
-    public function updateSaving(User $user, Role $role)
+    public function updateSavingTemp(User $user, Role $role)
     {
         return $role->name == "Admin";
     }
@@ -100,6 +100,54 @@ class RolePolicy
      * @return bool
      */
     public function updateCredit(User $user, Role $role)
+    {
+        return $role->name == "Admin";
+    }
+
+    /**
+     * Determine if user can make sync all user request.
+     *
+     * @param  App\User  $user
+     * @param  App\Role  $role
+     * @return bool
+     */
+    public function syncAllUser(User $user, Role $role)
+    {
+        return $role->name == "Admin";
+    }
+
+    /**
+     * Determine if user can make sync specific user request.
+     *
+     * @param  App\User  $user
+     * @param  App\Role  $role
+     * @return bool
+     */
+    public function syncSpecificUser(User $user, Role $role)
+    {
+        return $role->name == "Admin";
+    }
+
+    /**
+     * Determine if user can make unsync all user request.
+     *
+     * @param  App\User  $user
+     * @param  App\Role  $role
+     * @return bool
+     */
+    public function unsyncAllUser(User $user, Role $role)
+    {
+        return $role->name == "Admin";
+    }
+
+    /**
+     * Determine if user can make sync specific user request.
+     *
+     * @param  App\User  $user
+     * @param  App\Role  $role
+     * @return bool
+     */
+    public function unsyncSpecificUser(User $user, Role $role)
     {
         return $role->name == "Admin";
     }

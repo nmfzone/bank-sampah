@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Http\Requests\Validation\ValidatorExtended;
+use App\Services\ValidatorExtended;
 
 class ValidationExtensionServiceProvider extends ServiceProvider
 {

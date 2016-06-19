@@ -12,7 +12,7 @@ use App\DataTables\UsersDataTable;
 
 use App\User;
 use App\Role;
-use App\Image;
+use App\Saving;
 
 use App\Http\Requests\Users\CreateUserRequest;
 use App\Http\Requests\Users\UpdateUserRequest;
@@ -78,17 +78,20 @@ class UserManagementController extends Controller
         $term = $request->term;
         $results = [];
 
-        $queries = $user->where('username', 'LIKE', '%'.$term.'%')
-            ->orWhere('name', 'LIKE', '%'.$term.'%')
-            ->whereNotIn('id', [1, 2])
-            ->take(5)->get();
-
-        if (null == $term) {
+        if (null != $term) {
+            $queries = $user->whereNotIn('id', [1, 2])
+                ->where(function ($query) use ($term) {
+                    $query->where('username', 'LIKE', '%'.$term.'%')
+                        ->orWhere('name', 'LIKE', '%'.$term.'%');
+                })
+                ->take(5)->get();
+        } else {
             $queries = $user->whereNotIn('id', [1, 2])->take(5)->get();
         }
 
         foreach ($queries as $query) {
-            $results[] = [ 'id' => $query->id, 'value' => $query->name ];
+            $balance = $user->find($query->id)->balance();
+            $results[] = [ 'id' => $query->id, 'value' => $query->name, 'balance' => $balance ];
         }
 
         return response()->json($results);
@@ -121,6 +124,11 @@ class UserManagementController extends Controller
         $userRole = $role->whereName('User')->first()->id;
 
         $user = $user->newInstance($request->all());
+        if ("" == $request->created_at) {
+            unset($user['created_at']);
+        } else {
+            $user->created_at = Carbon::createFromFormat('d-m-Y', $request->created_at)->toDateTimeString();
+        }
         $user->role_id = $userRole;
         $user->save();
 
@@ -138,9 +146,10 @@ class UserManagementController extends Controller
     public function show(User $user)
     {
         $pageTitle = $user->name;
-        $savings = $user->savings;
+        $savings = $user->savings()->orderBy('created_at', 'DESC')->take(5)->get();
+        $statuses = $user->getStatuses();
 
-        return view('dashboard.admin.users.show', compact('pageTitle', 'user', 'savings'));
+        return view('dashboard.admin.users.show', compact('pageTitle', 'user', 'savings', 'statuses'));
     }
 
     /**
@@ -155,8 +164,9 @@ class UserManagementController extends Controller
             return abort(404);
         }
         $edit = true;
+        $statuses = $user->getStatuses();
 
-        return view('dashboard.admin.users.edit', compact('setting', 'user', 'pageTitle', 'edit'));
+        return view('dashboard.admin.users.edit', compact('setting', 'user', 'pageTitle', 'statuses', 'edit'));
     }
 
     /**
@@ -168,7 +178,13 @@ class UserManagementController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        $user->update($request->all());
+        $data = $request->all();
+        if ($data['created_at'] != $user->created_at) {
+            $data['created_at'] = Carbon::createFromFormat('d-m-Y', $data['created_at'])->toDateTimeString();
+        } else {
+            $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+        }
+        $user->update($data);
 
         if ($request->setting == 1) {
             alert()->success($this->message->shout('update.success.a'))->persistent("Close");

@@ -30,13 +30,15 @@ class UpdateUserRequest extends Request
         $user = $this->route('users');
 
         return [
-            'username'              => 'required|max:255|alpha_dash|unique:users,username,'.$user->id,
-            'id_card_number'        => 'sometimes|required|digits_between:5,255',
-            'name'                  => 'required|max:255|unique:users,name,'.$user->id,
-            'email'                 => 'email|max:255|unique:users,email,'.$user->id,
-            'password'              => 'confirmed|min:6',
-            'address'               => 'sometimes|required',
-            'status'                => 'sometimes|required|numeric|min:0|max:4',
+            'username'          => 'required|max:255|alpha_dash|unique:users,username,'.$user->id,
+            'id_card_number'    => 'sometimes|required|digits_between:5,255',
+            'name'              => 'required|max:255|unique:users,name,'.$user->id,
+            'email'             => 'email|max:255|unique:users,email,'.$user->id,
+            'password'          => 'confirmed|min:6',
+            'address'           => 'sometimes|required',
+            'phone'             => 'sometimes|required',
+            'status'            => 'sometimes|required|numeric|min:0|max:4',
+            'created_at'        => 'sometimes|required',
         ];
     }
 

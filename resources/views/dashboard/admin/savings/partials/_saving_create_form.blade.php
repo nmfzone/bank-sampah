@@ -25,10 +25,8 @@
     <textarea class="form-control" name="note" rows="3">{{ old('note') }}</textarea>
 @endsection
 
-@section('input_status')
-    <option value="0" selected>Diterima</option>
-    <option value="1">Ditangguhkan</option>
-    <option value="2">Dibatalkan</option>
+@section('input_date')
+    <input type="text" class="form-control input-date" name="created_at" value="{{ old('created_at') }}" readonly>
 @endsection
 
 @section('submit_message')

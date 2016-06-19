@@ -35,34 +35,83 @@ Route::group(['middleware' => 'auth'], function ()
             'as'   => 'dashboard.admin',
             'uses' => 'Dashboard\DashboardController@admin'
         ]);
-        Route::get('users/settings', [
-            'as'   => 'admin.setting',
-            'uses' => 'Dashboard\Admin\UserManagementController@setting'
-        ]);
-        Route::get('users/getUsers', [
-            'as'   => 'dashboard.protected.users.getUsers',
-            'uses' => 'Dashboard\Admin\UserManagementController@getUsers'
-        ]);
-        Route::get('users/search/autocomplete', [
-            'as'   => 'dashboard.protected.users.autocomplete',
-            'uses' => 'Dashboard\Admin\UserManagementController@autocomplete'
-        ]);
-        Route::get('transactions/getSavings', [
-            'as'   => 'dashboard.protected.transactions.getSavings',
-            'uses' => 'Dashboard\Admin\SavingController@getSavings'
-        ]);
-        Route::get('transactions/credit', [
-            'as'   => 'dashboard.protected.transactions.credit',
-            'uses' => 'Dashboard\Admin\SavingController@credit'
-        ]);
-        Route::post('transactions/credit', [
-            'as'   => 'dashboard.protected.transactions.credit.create',
-            'uses' => 'Dashboard\Admin\SavingController@createCredit'
-        ]);
-        Route::resource('users', 'Dashboard\Admin\UserManagementController');
         Route::resource('categories', 'Dashboard\Admin\CategoryController');
         Route::resource('types', 'Dashboard\Admin\TypeController');
-        Route::resource('transactions', 'Dashboard\Admin\SavingController');
+        Route::group(['prefix' => 'users'], function ()
+        {
+            Route::get('settings', [
+                'as'   => 'admin.setting',
+                'uses' => 'Dashboard\Admin\UserManagementController@setting'
+            ]);
+            Route::get('getUsers', [
+                'as'   => 'dashboard.protected.users.getUsers',
+                'uses' => 'Dashboard\Admin\UserManagementController@getUsers'
+            ]);
+            Route::get('search/autocomplete', [
+                'as'   => 'dashboard.protected.users.autocomplete',
+                'uses' => 'Dashboard\Admin\UserManagementController@autocomplete'
+            ]);
+        });
+        Route::resource('users', 'Dashboard\Admin\UserManagementController');
+        Route::group(['prefix' => 'transactions'], function ()
+        {
+            Route::get('/', [
+                'as'   => 'dashboard.protected.transactions.index',
+                'uses' => 'Dashboard\Admin\SavingController@indexSavings'
+            ]);
+            Route::delete('/{savings}', [
+                'as'   => 'dashboard.protected.transactions.destroy',
+                'uses' => 'Dashboard\Admin\SavingController@destroySavings'
+            ]);
+            Route::get('temporaries/getSavingsTemp', [
+                'as'   => 'dashboard.protected.transactions.temporaries.getSavingsTemp',
+                'uses' => 'Dashboard\Admin\SavingController@getSavingsTemp'
+            ]);
+            Route::get('getSavings', [
+                'as'   => 'dashboard.protected.transactions.getSavings',
+                'uses' => 'Dashboard\Admin\SavingController@getSavings'
+            ]);
+            Route::get('credit', [
+                'as'   => 'dashboard.protected.transactions.credit.index',
+                'uses' => 'Dashboard\Admin\SavingController@credit'
+            ]);
+            Route::post('credit', [
+                'as'   => 'dashboard.protected.transactions.credit.create',
+                'uses' => 'Dashboard\Admin\SavingController@createCredit'
+            ]);
+            Route::post('synchronize-specific', [
+                'as'   => 'dashboard.protected.transactions.sync.specific',
+                'uses' => 'Dashboard\Admin\SavingController@synchronizeSpecificUser'
+            ]);
+            Route::post('synchronize-all', [
+                'as'   => 'dashboard.protected.transactions.sync.all',
+                'uses' => 'Dashboard\Admin\SavingController@synchronizeAllUser'
+            ]);
+            Route::post('unsynchronize-specific', [
+                'as'   => 'dashboard.protected.transactions.unsync.specific',
+                'uses' => 'Dashboard\Admin\SavingController@unsynchronizeSpecificUser'
+            ]);
+            Route::post('unsynchronize-all', [
+                'as'   => 'dashboard.protected.transactions.unsync.all',
+                'uses' => 'Dashboard\Admin\SavingController@unsynchronizeAllUser'
+            ]);
+            Route::resource('temporaries', 'Dashboard\Admin\SavingController');
+        });
+        Route::group(['prefix' => 'recapitulations'], function ()
+        {
+            Route::get('/', [
+                'as'   => 'dashboard.protected.recapitulations.index',
+                'uses' => 'Dashboard\Admin\RecapitulationController@index'
+            ]);
+            Route::post('/', [
+                'as'   => 'dashboard.protected.recapitulations.create',
+                'uses' => 'Dashboard\Admin\RecapitulationController@create'
+            ]);
+            Route::get('getRecapitulation', [
+                'as'   => 'dashboard.protected.recapitulations.getRecapitulation',
+                'uses' => 'Dashboard\Admin\RecapitulationController@getRecapitulation'
+            ]);
+        });
     });
 
     Route::group(['middleware' => 'role:user', 'prefix' => 'dashboard'], function ()

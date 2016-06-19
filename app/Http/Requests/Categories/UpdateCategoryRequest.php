@@ -30,7 +30,7 @@ class UpdateCategoryRequest extends Request
 
         return [
             'name'  => 'required|max:255|unique:categories,name,'.$id,
-            'price' => 'required|numeric',
+            'price' => 'required|numeric|positive',
         ];
     }
 

@@ -148,7 +148,7 @@ return [
         App\Providers\SiteOptionServiceProvider::class,
         App\Providers\UserManagementServiceProvider::class,
         App\Providers\MessagesTranslationServiceProvider::class,
-        // App\Providers\ValidationExtensionServiceProvider::class,
+        App\Providers\ValidationExtensionServiceProvider::class,
 
         Intervention\Image\ImageServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,

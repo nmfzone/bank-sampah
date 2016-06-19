@@ -26,9 +26,10 @@ class UserTableSeeder extends Seeder
             'email'             => 'admin@banksampah.com',
             'password'          => '123456',
             'address'           => 'Yogyakarta',
+            'phone'             => '000000000',
             'id_card_number'    => '000000000',
             'role_id'           => $adminRole,
-            'status'            => 2,
+            'status'            => 4,
         ]);
 
         User::create([
@@ -37,6 +38,7 @@ class UserTableSeeder extends Seeder
             'email'             => 'hi@nmfzone.com',
             'password'          => '123456',
             'address'           => 'Yogyakarta',
+            'phone'             => '100000000',
             'id_card_number'    => '100000000',
             'role_id'           => $userRole,
             'status'            => 1,

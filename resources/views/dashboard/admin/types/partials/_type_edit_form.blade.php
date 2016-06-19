@@ -5,5 +5,5 @@
 @endsection
 
 @section('submit_message')
-    Edit Tipe Sampah
+    Simpan Perubahan
 @endsection

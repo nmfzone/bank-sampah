@@ -40,6 +40,14 @@
     </div>
 
     <div class="form-group">
+        <label class="col-md-4 control-label">No. Telp</label>
+
+        <div class="col-md-6">
+            <input type="text" class="form-control" disabled value="{{ $user->phone }}">
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="col-md-4 control-label">Tanggal Bergabung</label>
 
         <div class="col-md-6">
@@ -51,38 +59,49 @@
         <label class="col-md-4 control-label">Status</label>
 
         <div class="col-md-6">
-            <input type="text" class="form-control" disabled value="{{ $user->status }}">
+            <select class="form-control" disabled>
+                @foreach($statuses as $k => $status)
+                    <option value="{{ $k }}" {{ $k==$user->status ? 'selected':'' }}>{{ $status }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 
     <div class="container-fluid">
         <div class="row">
-            <h3>Riwayat Tabungan</h3>
+            <h3>Riwayat Transaksi</h3>
             @if (!$savings->isEmpty())
-            <table class="table table-striped the-tables">
-                <tr>
-                    <th>Kategori</th>
-                    <th>Tipe</th>
-                    <th>Jumlah</th>
-                    <th>Debit</th>
-                    <th>Kredit</th>
-                    <th>Saldo</th>
-                    <th>Tanggal</th>
-                </tr>
-                @foreach($savings as $saving)
-                <tr>
-                    <td>{{ $saving->category()->first() != null ? $saving->category()->first()->name : '-' }}</td>
-                    <td>{{ $saving->type()->first() != null ? $saving->type()->first()->name : '-' }}</td>
-                    <td>{{ $saving->items_amount != null ? $saving->items_amount : '-' }}</td>
-                    <td>Rp {{ $saving->debit }},00</td>
-                    <td>Rp {{ $saving->credit }},00</td>
-                    <td>Rp {{ $saving->balance }},00</td>
-                    <td>{{ $saving->created_at }}</td>
-                </tr>
-                @endforeach
-            </table>
+                <div class="col-md-6 col-xs-6 pull-left">
+                    <h5>5 riwayat transaksi terakhir</h5>
+                </div>
+                <div class="col-md-6 col-xs-6">
+                    <a href="{!! route('dashboard.protected.transactions.index') !!}?name={{ $user->username }}" class="btn btn-primary pull-right">Lihat Selengkapnya</a>
+                </div>
+                <br /><br />
+                <table class="table table-striped the-tables">
+                    <tr>
+                        <th>Kategori</th>
+                        <th>Tipe</th>
+                        <th>Jumlah</th>
+                        <th>Debit</th>
+                        <th>Kredit</th>
+                        <th>Saldo</th>
+                        <th>Tanggal</th>
+                    </tr>
+                    @foreach($savings as $saving)
+                        <tr>
+                            <td>{{ $saving->category()->first() != null ? $saving->category()->first()->name : '-' }}</td>
+                            <td>{{ $saving->type()->first() != null ? $saving->type()->first()->name : '-' }}</td>
+                            <td>{{ $saving->items_amount != null ? $saving->items_amount : '-' }}</td>
+                            <td>Rp {{ $saving->debit }},00</td>
+                            <td>Rp {{ $saving->credit }},00</td>
+                            <td>Rp {{ $saving->balance }},00</td>
+                            <td>{{ $saving->created_at }}</td>
+                        </tr>
+                    @endforeach
+                </table>
             @else
-            {{ $user->name }} belum mempunyai riwayat tabungan.
+                {{ $user->name }} belum mempunyai riwayat transaksi.
             @endif
         </div>
     </div>

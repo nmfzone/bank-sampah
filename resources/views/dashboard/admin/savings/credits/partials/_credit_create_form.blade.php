@@ -6,17 +6,15 @@
 @endsection
 
 @section('input_credit')
-    <input type="text" class="form-control" name="credit" value="{{ old('credit') }}">
+    <input type="number" class="form-control" name="credit" value="{{ old('credit') }}">
+@endsection
+
+@section('input_date')
+    <input type="text" class="form-control input-date" name="created_at" value="{{ old('created_at') }}" readonly>
 @endsection
 
 @section('input_note')
     <textarea class="form-control" name="note" rows="3">{{ old('note') }}</textarea>
-@endsection
-
-@section('input_status')
-    <option value="0" selected>Diterima</option>
-    <option value="1">Ditangguhkan</option>
-    <option value="2">Dibatalkan</option>
 @endsection
 
 @section('submit_message')

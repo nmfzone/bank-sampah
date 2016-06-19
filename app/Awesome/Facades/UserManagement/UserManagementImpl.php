@@ -30,15 +30,15 @@ class UserManagementImpl implements UserManagementContract
     public static function getMostActiveUser()
     {
         $carbon = new Carbon;
-        $id = DB::table('savings')
+        $userSaving = DB::table('savings')
             ->select('user_id', DB::raw('count(*) as total'))
             ->where('created_at', '>=', $carbon->startOfMonth())
             ->groupBy('user_id')
             ->orderBy('total', 'DESC')
-            ->first()->user_id;
+            ->first();
 
-        if (null != $id) {
-            return User::find($id);
+        if (null != $userSaving) {
+            return User::find($userSaving->user_id);
         }
 
         return null;

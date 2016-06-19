@@ -13,19 +13,19 @@
 </div>
 
 @if(!$setting)
-<div class="form-group{{ $errors->has('id_card_number') ? ' has-error' : '' }}">
-    <label class="col-md-4 control-label">No Identitas</label>
+    <div class="form-group{{ $errors->has('id_card_number') ? ' has-error' : '' }}">
+        <label class="col-md-4 control-label">No Identitas</label>
 
-    <div class="col-md-6">
-        @yield('input_identity')
+        <div class="col-md-6">
+            @yield('input_identity')
 
-        @if ($errors->has('id_card_number'))
-            <span class="help-block">
-                <strong>{{ $errors->first('id_card_number') }}</strong>
-            </span>
-        @endif
+            @if ($errors->has('id_card_number'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('id_card_number') }}</strong>
+                </span>
+            @endif
+        </div>
     </div>
-</div>
 @endif
 
 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
@@ -85,35 +85,65 @@
 </div>
 
 @if(!$setting)
-<div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
-    <label class="col-md-4 control-label">Alamat</label>
+    <div class="form-group{{ $errors->has('address') ? ' has-error' : '' }}">
+        <label class="col-md-4 control-label">Alamat</label>
 
-    <div class="col-md-6">
-        @yield('input_address')
+        <div class="col-md-6">
+            @yield('input_address')
 
-        @if ($errors->has('address'))
-            <span class="help-block">
-                <strong>{{ $errors->first('address') }}</strong>
-            </span>
-        @endif
+            @if ($errors->has('address'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('address') }}</strong>
+                </span>
+            @endif
+        </div>
     </div>
-</div>
 
-@if($edit)
-<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-    <label class="col-md-4 control-label">Status</label>
+    <div class="form-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+        <label class="col-md-4 control-label">No. Telp</label>
 
-    <div class="col-md-6">
-        @yield('input_status')
+        <div class="col-md-6">
+            @yield('input_phone')
 
-        @if ($errors->has('status'))
-            <span class="help-block">
-                <strong>{{ $errors->first('status') }}</strong>
-            </span>
-        @endif
+            @if ($errors->has('phone'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('phone') }}</strong>
+                </span>
+            @endif
+        </div>
     </div>
-</div>
-@endif
+
+    @if($edit)
+        <div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
+            <label class="col-md-4 control-label">Status</label>
+
+            <div class="col-md-6">
+                <select class="form-control" name="status">
+                    @yield('input_status')
+                </select>
+
+                @if ($errors->has('status'))
+                    <span class="help-block">
+                        <strong>{{ $errors->first('status') }}</strong>
+                    </span>
+                @endif
+            </div>
+        </div>
+    @endif
+
+    <div class="form-group{{ $errors->has('created_at') ? ' has-error' : '' }}">
+        <label class="col-md-4 control-label">Tanggal Bergabung</label>
+
+        <div class="col-md-6">
+            @yield('input_date')
+
+            @if ($errors->has('created_at'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('created_at') }}</strong>
+                </span>
+            @endif
+        </div>
+    </div>
 @endif
 
 {!! csrf_field() !!}

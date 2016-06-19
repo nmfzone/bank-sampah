@@ -36,6 +36,13 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
+            if ($this->auth->user()->status == 2) {
+                alert()->success('Account anda telah di banned. Silahkan kontak administrator.')->persistent("Close");
+                $this->auth->logout();
+
+                return redirect('auth/login');
+            }
+
             if ($this->auth->user()->hasRole('admin')) {
                 return redirect('dashboard/protected');
             } else if ($this->auth->user()->hasRole('user')) {

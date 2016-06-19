@@ -11,9 +11,10 @@
 @section('content')
 <div class="row">
     <div class="col-md-8 col-md-offset-2">
-        <form class="form-horizontal" role="form" method="POST" action="{{ url('/dashboard/protected/transactions/' . $saving->id) }}">
+        <form class="form-horizontal" role="form" method="POST" action="{{ url('/dashboard/protected/transactions/temporaries/' . $savingTemp->id) }}">
 
             {{ method_field('PUT') }}
+            <input type="hidden" name="type" value="in">
             @include('dashboard.admin.savings.partials._saving_edit_form')
 
         </form>

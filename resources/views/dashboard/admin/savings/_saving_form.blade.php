@@ -73,17 +73,15 @@
     </div>
 </div>
 
-<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-    <label class="col-md-4 control-label">Status</label>
+<div class="form-group{{ $errors->has('created_at') ? ' has-error' : '' }}">
+    <label class="col-md-4 control-label">Tanggal</label>
 
     <div class="col-md-6">
-        <select class="form-control" name="status">
-            @yield('input_status')
-        </select>
+        @yield('input_date')
 
-        @if ($errors->has('status'))
+        @if ($errors->has('created_at'))
             <span class="help-block">
-                <strong>{{ $errors->first('status') }}</strong>
+                <strong>{{ $errors->first('created_at') }}</strong>
             </span>
         @endif
     </div>
