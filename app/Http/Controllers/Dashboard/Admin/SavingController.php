@@ -246,6 +246,12 @@ class SavingController extends Controller
     {
         $savingsTemp = $savingTemp->where('user_id', $request->user_id)->orderBy('created_at')->get();
 
+        if ($savingsTemp->isEmpty()) {
+            alert()->error('Tidak ada transaksi nasabah ini yang belum disinkronisasi.')->persistent("Close");
+
+            return redirect()->back();
+        }
+
         foreach ($savingsTemp as $trans) {
             $id = $trans->id;
             unset($trans['id']);
@@ -302,6 +308,12 @@ class SavingController extends Controller
         Saving $saving)
     {
         $savings = $saving->where('user_id', $request->user_id)->get();
+
+        if ($savings->isEmpty()) {
+            alert()->error('Tidak ada transaksi nasabah ini yang belum diunsinkronisasi.')->persistent("Close");
+
+            return redirect()->back();
+        }
 
         foreach ($savings as $trans) {
             $id = $trans->id;
@@ -434,10 +446,10 @@ class SavingController extends Controller
             $user = $user->where('username', $request->name)->first();
             $id = ($user === null) ? -1 : $user->id;
             return Datatables::of(Saving::where('user_id', $id)->orderBy('created_at', 'DESC')
-                                ->with('user')
-                                ->with('category')
-                                ->with('type'))
-                    ->make(true);
+                ->with('user')
+                ->with('category')
+                ->with('type'))
+                ->make(true);
         }
 
         return Datatables::of(Saving::orderBy('created_at', 'DESC')->with('user')->with('category')->with('type'))
