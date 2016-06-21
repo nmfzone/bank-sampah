@@ -179,10 +179,13 @@ class UserManagementController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->all();
-        if ($data['created_at'] != $user->created_at) {
-            $data['created_at'] = Carbon::createFromFormat('d-m-Y', $data['created_at'])->toDateTimeString();
-        } else {
-            $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+
+        if ($request->setting != 1) {
+            if ($data['created_at'] != $user->created_at) {
+                $data['created_at'] = Carbon::createFromFormat('d-m-Y', $data['created_at'])->toDateTimeString();
+            } else {
+                $data['created_at'] = Carbon::createFromFormat('d F Y H:i:s', $data['created_at'])->toDateTimeString();
+            }
         }
         $user->update($data);
 
