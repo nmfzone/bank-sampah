@@ -26,7 +26,15 @@
                     <li id="point">:</li>
                     <li id="min"></li>
                 </ul>
-                <a href="{{ url('auth/login') }}" class="btn btn-primary">Logging In</a>
+                @if (auth()->guest())
+                    <a href="{{ url('auth/login') }}" class="btn btn-primary">Masuk</a>
+                @else
+                    @if (auth()->user()->hasRole('admin'))
+                        <a href="{{ url('dashboard/protected') }}" class="btn btn-primary">Dashboard</a>
+                    @else
+                        <a href="{{ url('dashboard') }}" class="btn btn-primary">Dashboard</a>
+                    @endif
+                @endif
             </div>
         </div>
     </div>

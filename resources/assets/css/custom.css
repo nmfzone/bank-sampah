@@ -38,9 +38,20 @@ body.landing {
   margin-top: 45%;
 }
 
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 450px) {
   .landing .clock {
-    font-size: 20px;
+    margin-top: 65%;
+  }
+  .landing .clock ul li {
+    font-size: 7em;
+  }
+}
+@media only screen and (max-width: 320px) {
+  .landing .clock {
+    margin-top: 75%;
+  }
+  .landing .clock ul li {
+    font-size: 5em;
   }
 }
 
