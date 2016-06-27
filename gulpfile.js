@@ -28,11 +28,11 @@ var gulp         = require('gulp'),
     ],
     inputVendorJs = [
       'resources/assets/js/vendor/jquery.min.js',
-      'resources/assets/js/vendor/jquery.dataTables.min.js',
       'resources/assets/js/vendor/bootstrap.min.js',
+      'resources/assets/js/vendor/dataTables.min.js',
+      'resources/assets/js/vendor/dataTables.bootstrap.min.js',
       'resources/assets/js/vendor/metisMenu.min.js',
       'resources/assets/js/vendor/sweetalert.min.js',
-      'resources/assets/js/vendor/bootstrap-datepicker.js',
       'resources/assets/js/vendor/*.js'
     ],
     outputVendor = {

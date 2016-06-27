@@ -7,7 +7,7 @@
 @section('content')
 
     <div class="row row-centered">
-        <div class="col-lg-3 col-md-6 col-centered">
+        <div class="col-xs-12 col-sm-12 col-lg-3 col-md-6 col-centered">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-centered">
+        <div class="col-xs-12 col-lg-3 col-sm-12 col-md-6 col-centered">
             <div class="panel panel-green">
                 <div class="panel-heading">
                     <div class="row">
@@ -31,7 +31,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-centered">
+        <div class="col-xs-12 col-sm-12 col-lg-6 col-md-12 col-centered">
             <div class="panel panel-yellow">
                 <div class="panel-heading">
                     <div class="row">
@@ -45,7 +45,7 @@
         </div>
     </div>
     <div class="row row-centered">
-        <div class="col-lg-3 col-md-6 col-centered">
+        <div class="col-xs-12 col-sm-12 col-lg-3 col-md-6 col-centered">
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <div class="row">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-centered">
+        <div class="col-xs-12 col-sm-12 col-lg-3 col-md-6 col-centered">
             <div class="panel panel-green">
                 <div class="panel-heading">
                     <div class="row">
@@ -75,7 +75,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-centered">
+        <div class="col-xs-12 col-sm-12 col-lg-6 col-md-12 col-centered">
             <div class="panel panel-yellow">
                 <div class="panel-heading">
                     <div class="row">
