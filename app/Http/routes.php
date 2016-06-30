@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 
 /*----------------------------------------
 | Application Routes
@@ -13,7 +13,7 @@
 Route::get('/', 'HomeController@index');
 
 Route::get('auth/login', [
-    'as'   => 'auth.login',
+    'as'   => --> 'auth.login',
     'uses' => 'Auth\AuthController@getLogin'
 ]);
 
@@ -26,6 +26,25 @@ Route::get('auth/logout', [
     'as'   => 'auth.logout',
     'uses' => 'Auth\AuthController@getLogout'
 ]);
+
+/*
+ * Not Used
+ *
+Route::get('auth/register', [
+    'as'   => 'auth.register',
+    'uses' => 'Auth\AuthController@getRegistration'
+]);
+
+Route::post('auth/register', [
+    'as'   => 'auth.doRegister',
+    'uses' => 'Auth\AuthController@postRegistration'
+]);
+
+Route::get('auth/emails/verify/{code}', [
+    'as'   => 'auth.emails.verify',
+    'uses' => 'Auth\AuthController@verifyEmailActivationCode'
+]);
+*/
 
 Route::group(['middleware' => 'auth'], function ()
 {
