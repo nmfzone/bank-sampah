@@ -1,4 +1,4 @@
-<!-- <?php
+<?php
 
 /*----------------------------------------
 | Application Routes
@@ -13,7 +13,7 @@
 Route::get('/', 'HomeController@index');
 
 Route::get('auth/login', [
-    'as'   => --> 'auth.login',
+    'as'   => 'auth.login',
     'uses' => 'Auth\AuthController@getLogin'
 ]);
 
