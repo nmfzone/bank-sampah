@@ -7,7 +7,7 @@ use Datatables;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Awesome\Contracts\Controllers\Admin\SavingContract;
+use App\Awesome\Contracts\Controllers\Dashboard\Admin\SavingContract;
 
 use App\Saving;
 use App\SavingTemp;
@@ -23,8 +23,7 @@ use App\Http\Requests\Savings\SynchronizeAllUserRequest;
 use App\Http\Requests\Savings\UnsynchronizeSpecificUserRequest;
 use App\Http\Requests\Savings\UnsynchronizeAllUserRequest;
 
-// class SavingController extends Controller implements SavingContract
-class SavingController extends Controller
+class SavingController extends Controller implements SavingContract
 {
     /**
      * Display a listing of the saving_temp.
@@ -193,6 +192,9 @@ class SavingController extends Controller
      * Store a newly created credit transaction in storage.
      *
      * @param  App\Http\Requests\Savings\CreateCreditRequest $request
+     * @param  App\SavingTemp  $savingTemp
+     * @param  App\Saving  $saving
+     * @param  App\User  $user
      * @return \Illuminate\Http\Response
      */
     public function createCredit(CreateCreditRequest $request, SavingTemp $savingTemp,
@@ -241,6 +243,13 @@ class SavingController extends Controller
         return redirect('/dashboard/protected/transactions/temporaries');
     }
 
+    /**
+     * Synchronize transaction for specific user.
+     *
+     * @param  App\Http\Requests\Savings\SynchronizeSpecificUserRequest $request
+     * @param  App\SavingTemp  $savingTemp
+     * @return \Illuminate\Http\Response
+     */
     public function synchronizeSpecificUser(SynchronizeSpecificUserRequest $request,
         SavingTemp $savingTemp)
     {
@@ -273,6 +282,14 @@ class SavingController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Synchronize transaction for all user.
+     *
+     * @param  App\Http\Requests\Savings\SynchronizeAllUserRequest $request
+     * @param  App\User  $user
+     * @param  App\SavingTemp  $savingTemp
+     * @return \Illuminate\Http\Response
+     */
     public function synchronizeAllUser(SynchronizeAllUserRequest $request, User $user, SavingTemp $savingTemp)
     {
         $savingsTemp = $savingTemp->all()->sortBy('created_at');
@@ -304,6 +321,13 @@ class SavingController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Unsynchronize transaction for specific user.
+     *
+     * @param  App\Http\Requests\Savings\UnsynchronizeSpecificUserRequest $request
+     * @param  App\Saving  $saving
+     * @return \Illuminate\Http\Response
+     */
     public function unsynchronizeSpecificUser(UnsynchronizeSpecificUserRequest $request,
         Saving $saving)
     {
@@ -333,6 +357,14 @@ class SavingController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Unsynchronize transaction for all user.
+     *
+     * @param  App\Http\Requests\Savings\UnsynchronizeAllUserRequest $request
+     * @param  App\User  $user
+     * @param  App\Saving  $saving
+     * @return \Illuminate\Http\Response
+     */
     public function unsynchronizeAllUser(UnsynchronizeAllUserRequest $request, User $user, Saving $saving)
     {
         $savings = $saving->all();

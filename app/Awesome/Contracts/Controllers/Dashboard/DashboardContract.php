@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Awesome\Contracts\Controllers;
+namespace App\Awesome\Contracts\Controllers\Dashboard;
 
 interface DashboardContract
 {

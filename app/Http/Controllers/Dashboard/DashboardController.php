@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
-use App\Awesome\Contracts\Controllers\DashboardContract;
+use App\Awesome\Contracts\Controllers\Dashboard\DashboardContract;
 
 use App\User;
 use App\Category;

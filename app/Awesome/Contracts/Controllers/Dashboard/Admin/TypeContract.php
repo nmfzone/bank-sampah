@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Awesome\Contracts\Controllers\Admin;
+namespace App\Awesome\Contracts\Controllers\Dashboard\Admin;
 
 use App\Type;
 

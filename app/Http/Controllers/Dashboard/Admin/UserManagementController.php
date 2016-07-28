@@ -17,10 +17,9 @@ use App\Saving;
 use App\Http\Requests\Users\CreateUserRequest;
 use App\Http\Requests\Users\UpdateUserRequest;
 
-use App\Awesome\Contracts\Controllers\Admin\UserManagementContract;
+use App\Awesome\Contracts\Controllers\Dashboard\Admin\UserManagementContract;
 
-// class UserManagementController extends Controller implements UserManagementContract
-class UserManagementController extends Controller
+class UserManagementController extends Controller implements UserManagementContract
 {
     /**
      * The loader implementation.
@@ -207,6 +206,7 @@ class UserManagementController extends Controller
      */
     public function destroy(User $user)
     {
+        // SuperAdmin can't destroy themself
         if ($user->id == 1) {
             return abort(404);
         }

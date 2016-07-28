@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Awesome\Contracts\Controllers\Admin\TypeContract;
+use App\Awesome\Contracts\Controllers\Dashboard\Admin\TypeContract;
 
 use App\Type;
 

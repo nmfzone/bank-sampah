@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Awesome\Contracts\Controllers\User;
+namespace App\Awesome\Contracts\Controllers\Dashboard\User;
 
 use App\User;
 use App\Category;

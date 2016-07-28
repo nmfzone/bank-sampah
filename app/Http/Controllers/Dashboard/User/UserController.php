@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Dashboard\User;
 
 use App\Http\Controllers\Controller;
-use App\Awesome\Contracts\Controllers\User\UserContract;
+use App\Awesome\Contracts\Controllers\Dashboard\User\UserContract;
 use Message;
 
 use App\User;
